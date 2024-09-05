@@ -4,6 +4,8 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import model.exceptions.DomainException;
+
 public class Reservation {
 
 	private Integer number;
@@ -12,7 +14,13 @@ public class Reservation {
 
 	private static DateTimeFormatter fmt1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-	public Reservation(Integer number, LocalDate checkIn, LocalDate checkOut) {
+	public Reservation(Integer number, LocalDate checkIn, LocalDate checkOut) throws DomainException {
+		if (checkIn.isAfter(LocalDate.now())) {
+			throw new DomainException("Reservation dates must be in futures dates");
+		}
+		if (checkIn.isAfter(checkOut)) {
+			throw new DomainException("Check-out date must be after check-in date");
+		}
 		this.number = number;
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
@@ -40,7 +48,13 @@ public class Reservation {
 		return t;
 	}
 
-	public void updateDates(LocalDate checkIn, LocalDate checkOut) {
+	public void updateDates(LocalDate checkIn, LocalDate checkOut) throws DomainException {
+		if (LocalDate.now().isAfter(checkIn)) {
+			throw new DomainException("Error in resertation: Reservation dates for update must be future dates");
+		} 
+		else if (checkIn.isAfter(checkOut)) {
+			throw new DomainException("Error in resertation: Check-out date must be after check-in date!");
+		}
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
 	}
