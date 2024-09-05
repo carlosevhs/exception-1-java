@@ -19,36 +19,29 @@ public class Program {
 		LocalDate checkIn = LocalDate.parse(sc.next(), sdf);
 		System.out.print("Check-out date (dd/MM/yyy): ");
 		LocalDate checkOut = LocalDate.parse(sc.next(), sdf);
-		
+
 		if (checkIn.isAfter(checkOut)) {
 			System.out.println("Error in resertation: Check-out date must be after check-in date!");
-		}
-		else {
+		} else {
 			Reservation reservation = new Reservation(number, checkIn, checkOut);
 			System.out.println(reservation);
-			
+
 			System.out.println("\nEnter data to update the reservation: ");
 			System.out.print("Check-in date (dd/MM/yyy): ");
 			checkIn = LocalDate.parse(sc.next(), sdf);
 			System.out.print("Check-out date (dd/MM/yyy): ");
 			checkOut = LocalDate.parse(sc.next(), sdf);
-			
-			if (LocalDate.now().isAfter(checkIn)) {
-				System.out.println("Error in resertation: Reservation dates for update must be future dates");
-			} 
-			else if (checkIn.isAfter(checkOut)) {
-				System.out.println("Error in resertation: Check-out date must be after check-in date!");
-			}
-			else 
-			{				
-				reservation.updateDates(checkIn, checkOut);
-				System.out.println(reservation);
 
+			String error = reservation.updateDates(checkIn, checkOut);
+			if (error == null) {
+				System.out.println(reservation);				
 			}
+			else {
+				System.out.println(error);
+			}
+
 		}
-		
-		
-		
+
 		sc.close();
 	}
 
